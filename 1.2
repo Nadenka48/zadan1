@@ -1,5 +1,7 @@
+#pragma warning(disable:4996)
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 /**
  * @brief рассчитывает площадь прямоуголього треугольника
@@ -7,8 +9,17 @@
  * @param secondSide вторая сторона прямоуголього треугольника
  * @return возвращает рассчитанное значение
  */
-double Ploshad(const double fistSide, 
-                        const double secondSide);
+double Ploshad(const double firstSide, const double secondSide);
+
+/**
+ * @brief рассчитывает периметр прямоуголього треугольника
+ * @param fistSide первая сторона прямоуголього треугольника
+ * @param secondSide вторая сторона прямоуголього треугольника
+ * @return возвращает рассчитанное значение
+ */
+double Perimetr(const double firstSide, const double secondSide);
+
+
 
 /**
  * @brief Точка входа в программу
@@ -16,19 +27,26 @@ double Ploshad(const double fistSide,
  */
 int main()
 {
-    double fistSide;
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    double firstSide;
     double secondSide;
     printf("Введите первую сторону треугольника: ");
-    scanf("%lf", &fistSide);
+    scanf("%lf", &firstSide);
     printf("Введите вторую сторону треугольника: ");
     scanf("%lf", &secondSide);
-    printf("Площадь равна %.2lf", Ploshad(fistSide, secondSide));
-
+    printf("Площадь равна %.2lf\n", Ploshad(firstSide, secondSide));
+    
+    printf("Периметр равен %.2lf\n", Perimetr(firstSide, secondSide));
     return 0;
 }
 
-double Ploshad(const double fistSide,
-    const double secondSide)
+double Ploshad(const double firstSide, const double secondSide)
 {
-    return (fistSide * secondSide) / 2;
+    return (firstSide * secondSide) / 2;
+}
+
+double Perimetr(const double firstSide, const double secondSide)
+{
+    return (firstSide + secondSide + (sqrtf(pow(firstSide, 2) + pow(secondSide, 2))));
 }
