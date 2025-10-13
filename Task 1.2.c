@@ -29,8 +29,8 @@ int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    double firstSide;
-    double secondSide;
+    double firstSide=0;
+    double secondSide=0;
     printf("Введите первую сторону треугольника: ");
     scanf("%lf", &firstSide);
     printf("Введите вторую сторону треугольника: ");
@@ -49,4 +49,5 @@ double Ploshad(const double firstSide, const double secondSide)
 double Perimetr(const double firstSide, const double secondSide)
 {
     return (firstSide + secondSide + (sqrtf(pow(firstSide, 2) + pow(secondSide, 2))));
+
 }
