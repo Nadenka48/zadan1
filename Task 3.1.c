@@ -80,13 +80,7 @@ void checkStep(const double step)
 	}
 }
 
-bool defineOOF(const double x)
-{
-	return 1 <= x <= 2;
-}
-
 double getY(const double x)
 {
 	return y = cos(x) - exp(-pow(x,2) / 2) + x - 1;
-
 }
