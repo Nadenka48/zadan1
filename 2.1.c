@@ -65,6 +65,9 @@ int main(void)
     case sr:
         printf("среднее арифметическое равно %.2lf\n", getsr\(a, b));
         break;
+    default:
+        printf("Вы ввели неверное значение!");
+        abort();
     }
     return 0;
 }
