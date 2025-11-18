@@ -63,7 +63,7 @@ int main(void)
         printf("разность равна %.2lf\n", getraz(a, b));
         break;
     case sr:
-        printf("среднее арифметическое равно %.2lf\n", getsr\(a, b));
+        printf("среднее арифметическое равно %.2lf\n", getsr(a, b));
         break;
     default:
         printf("Вы ввели неверное значение!");
