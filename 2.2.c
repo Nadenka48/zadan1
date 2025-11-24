@@ -17,7 +17,7 @@ double getF(const double x, const double a);
 
 /**
  *@brief Точка входа в программу
- *@return возвращает 0, если программма выполнена корректно
+ *@return возвращает 0, если программа выполнена корректно
  */
 int main(void)
 {
@@ -49,4 +49,5 @@ double getF(const double x, const double a)
 	}
 	return sin(x) * a;
 }
+
 
