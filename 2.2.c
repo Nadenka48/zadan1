@@ -15,6 +15,10 @@ double getValue();
  */
 double getF(const double x, const double a);
 
+/**
+ *@brief Точка входа в программу
+ *@return возвращает 0, если программма выполнена корректно
+ */
 int main(void)
 {
 	SetConsoleCP(1251);
@@ -45,3 +49,4 @@ double getF(const double x, const double a)
 	}
 	return sin(x) * a;
 }
+
