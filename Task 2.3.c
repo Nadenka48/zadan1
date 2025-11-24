@@ -10,6 +10,10 @@
  */
 double getValue();
 
+/**
+ *@brief Точка входа в программу
+ *@return возвращает 0, если программма выполнена корректно
+ */
 int main() 
 {
     SetConsoleCP(1251);
@@ -44,4 +48,5 @@ double getValue()
         abort();
     }
     return value;
+
 }
