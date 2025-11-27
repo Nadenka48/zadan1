@@ -13,7 +13,7 @@ double getValue();
  *@param x - введённое значение x, a = константа равная 2
  *@return рассчитанное значение функции
  */
-double getF(const double x, const double a);
+double getY(const double x, const double a);
 
 /**
  *@brief Точка входа в программу
@@ -26,7 +26,7 @@ int main(void)
 	const double a = 2;
 	printf("Введите значение х: ");
 	double x = getValue();
-	printf("Функция у = %.5lf", getF(x, a));
+	printf("Функция у = %.5lf", getY(x, a));
 	return 0;
 }
 
@@ -41,7 +41,7 @@ double getValue()
 	return value;
 }
 
-double getF(const double x, const double a)
+double getY(const double x, const double a)
 {
 	if (x > a)
 	{
@@ -49,5 +49,3 @@ double getF(const double x, const double a)
 	}
 	return sin(x) * a;
 }
-
-
