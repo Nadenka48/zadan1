@@ -1,7 +1,7 @@
-﻿#pragma warning(disable:4996)
+#pragma warning(disable:4996)
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #define scanf_s scanf
 
 /**
@@ -32,14 +32,7 @@ void fillArray(int* arr, const size_t size);
 void printArray(int* arr, const size_t size);
 
 /**
- * @brief Находит сумму положительных элементов, значения которых состоят из двух цифр
- * @param arr массив
- * @param size размер массива
- */
-void sumPositiveTwoDigit(int* arr, const size_t size);
-
-/**
- * @brief Заполняет массив случайными числами в диапазоне [-1000;1000]
+ * @brief Заполняет массив случайными числами в пределах введённого пользователем диапазона
  * @param arr массив
  * @param size размер массива
  */
@@ -49,29 +42,40 @@ void fillRandom(int* arr, const size_t size);
  * @brief Создаёт копию массива
  * @param arr массив
  * @param size размер массива
- * @return полученный массив
+ * @return
  */
 int* copyArray(const int* arr, const size_t size);
 
 /**
- * @brief Умножает все четные положительные элементы на последний элемент массива
- * @param copyArr копия массива
- * @param size размер массива
- * @return Возвращает 1, если функция выполнена корректно, 0 - если не найдено четных положительных элементов
- */
-int multiplyEvenPositiveByLast(int* copyArr, const size_t size);
-
-/**
- * @brief Находит номер первой пары соседних элементов с разными знаками, сумма которых меньше заданного числа
+ * @brief ищет сумму положительных двузначных элементов массива
  * @param arr массив
  * @param size размер массива
- * @param threshold заданное число для сравнения
- * @return Возвращает индекс первого элемента пары, если пара найдена, -1 - если не найдена
+ * @return 1 - если функция выполнена корректно, иначе 1
  */
-int findFirstPairIndex(int* arr, const size_t size, const int threshold);
+int getSum2Digit(const int* arr, const size_t size);
 
 /**
- * @brief RANDOM - заполнение массива случайными числами в диапазоне [-1000;1000]
+ * @brief умножает все чётные положительные элементы массива на последний элемент массива
+ * @param copyArr копия массива
+ * @param size размер массива
+ * @return 1 - если функция выполнена корректно, иначе 0
+ */
+int multAllPosEvenWithLastDigit(int* copyArr, const size_t size);
+
+/**
+ * @brief ищет номер первой пары соседних элементов с разными знаками, сумма которых меньше заданного числа
+ * @param copyArr копия массива
+ * @param size размер массива
+ * @return 1 - если программа выполнена корректно, иначе 0
+ * @note здесь работа происходит не с изначальным массивом, а с уже изменённой выше копией этого массива
+ * для понимания касаемо номеров пары элементов: есть пара - нулевой и первый элемент массива, следовательно это первая пара.
+ * вторая пара - это первый и второй элемент массива. На этих примерах видно, что номер пары определяется номером
+ * второго элемента этой пары
+ */
+int FindNumberFirstDifPairWhichSumLessDigit(const int* copyArr, const size_t size);
+
+/**
+ * @brief RANDOM - заполнение массива случайными числами в пределах введённого пользователем диапазона
  * @brief MANUAL - заполнение массива вручную
  */
 enum { RANDOM = 1, MANUAL };
@@ -84,52 +88,35 @@ int main(void)
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    size_t size = getSize("Введите размер массива:\n");
+    size_t size = getSize("Input size of an array:\n");
     int* arr = malloc(size * sizeof(int));
     if (arr == NULL)
     {
-        fprintf(stderr, "Ошибка выделения памяти!");
+        fprintf(stderr, "Error");
         exit(1);
     }
-    printf("Выберите способ заполнения массива:\n%d - случайными числами\n%d - вручную\n", RANDOM, MANUAL);
+    printf("Chose the method of filling the array:\n%d - by random\n%d - manually\n", RANDOM, MANUAL);
     int choice = Value();
     switch (choice)
     {
     case RANDOM:
-        srand(time(NULL));
         fillRandom(arr, size);
         break;
     case MANUAL:
         fillArray(arr, size);
         break;
     default:
-        fprintf(stderr, "Ошибка выбора.");
+        fprintf(stderr, "Error.");
         free(arr);
         exit(1);
     }
-    printf("\nИсходный массив:\n");
     printArray(arr, size);
-    sumPositiveTwoDigit(arr, size);
+    printf("\n");
+    getSum2Digit(arr, size);
+    printf("\n");
     int* copyArr = copyArray(arr, size);
-    int result = multiplyEvenPositiveByLast(copyArr, size);
-    if (result == 1)
-    {
-        printf("Массив после умножения четных положительных элементов на последний элемент:\n");
-        printArray(copyArr, size);
-    }
-    printf("\nВведите число для сравнения суммы пары: ");
-    int threshold = Value();
-    int pairIndex = findFirstPairIndex(arr, size, threshold);
-    if (pairIndex != -1)
-    {
-        printf("Найдена пара: элементы [%d]=%d и [%d]=%d\n",
-            pairIndex, arr[pairIndex], pairIndex + 1, arr[pairIndex + 1]);
-        printf("Их сумма (%d) < %d\n", arr[pairIndex] + arr[pairIndex + 1], threshold);
-    }
-    else
-    {
-        printf("Пара соседних элементов с разными знаками и суммой меньше %d не найдена\n", threshold);
-    }
+    multAllPosEvenWithLastDigit(copyArr, size);
+    FindNumberFirstDifPairWhichSumLessDigit(copyArr, size);
     free(copyArr);
     free(arr);
     return 0;
@@ -140,7 +127,7 @@ int Value(void)
     int value = 0;
     int result = scanf("%d", &value);
     if (result != 1) {
-        fprintf(stderr, "Ошибка ввода");
+        fprintf(stderr, "Input error");
         exit(1);
     }
     return value;
@@ -152,7 +139,7 @@ size_t getSize(char* message)
     int value = Value();
     if (value <= 0)
     {
-        fprintf(stderr, "Размер должен быть положительным!");
+        fprintf(stderr, "Input error");
         exit(1);
     }
     return (size_t)value;
@@ -162,26 +149,14 @@ void fillArray(int* arr, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
-        printf("Введите элемент %zu (диапазон [-1000;1000]): ", i + 1);
+        printf("Input %zu element of array:", i);
         arr[i] = Value();
-        if (arr[i] < -1000 || arr[i] > 1000)
-        {
-            printf("Элемент вне допустимого диапазона [-1000;1000]!\n");
-            i--;
-        }
-    }
-}
-
-void fillRandom(int* arr, const size_t size)
-{
-    for (size_t i = 0; i < size; i++)
-    {
-        arr[i] = rand() % 2001 - 1000;
     }
 }
 
 void printArray(int* arr, const size_t size)
 {
+    printf("Your array is:\n");
     for (size_t i = 0; i < size; i++)
     {
         printf("%d ", arr[i]);
@@ -189,26 +164,19 @@ void printArray(int* arr, const size_t size)
     printf("\n");
 }
 
-void sumPositiveTwoDigit(int* arr, const size_t size)
+void fillRandom(int* arr, const size_t size)
 {
-    int sum = 0;
-    int found = 0;
-
+    printf("diapozon start:\n");
+    int start = Value();
+    printf("diapozon end:\n");
+    int end = Value();
+    if (start > end) {
+        fprintf(stderr, "Error: start cannot be greater than end\n");
+        exit(1);
+    }
     for (size_t i = 0; i < size; i++)
     {
-        if (arr[i] > 0 && arr[i] >= 10 && arr[i] <= 99)
-        {
-            sum += arr[i];
-            found = 1;
-        }
-    }
-    if (found)
-    {
-        printf("Сумма положительных двузначных элементов: %d\n", sum);
-    }
-    else
-    {
-        printf("Положительных двузначных элементов не найдено\n");
+        arr[i] = rand() % (end - start + 1) + start;
     }
 }
 
@@ -217,7 +185,7 @@ int* copyArray(const int* arr, const size_t size)
     int* copyArr = malloc(sizeof(int) * size);
     if (copyArr == NULL)
     {
-        fprintf(stderr, "Ошибка выделения памяти для копии массива");
+        fprintf(stderr, "Error");
         exit(1);
     }
     for (size_t i = 0; i < size; i++)
@@ -227,50 +195,51 @@ int* copyArray(const int* arr, const size_t size)
     return copyArr;
 }
 
-int multiplyEvenPositiveByLast(int* copyArr, const size_t size)
-{
-    if (size == 0)
-    {
-        printf("Массив пуст\n");
-        return 0;
-    }
-    int lastElement = copyArr[size - 1];
-    int modified = 0;
-    for (size_t i = 0; i < size - 1; i++)
-    {
-        if (copyArr[i] > 0 && copyArr[i] % 2 == 0)
-        {
-            copyArr[i] *= lastElement;
-            modified = 1;
+int getSum2Digit(const int* arr, const size_t size) {
+    int sum = 0; //счётчик для определения, выполнена ли операция хотя бы раз
+    for (size_t i = 0; i < size; i++) {
+        if (arr[i] >= 10 && arr[i] <= 99) {
+            sum += arr[i];
         }
     }
-    if (!modified)
-    {
-        printf("Четных положительных элементов для умножения не найдено\n");
+    if (sum == 0) {
+        printf("No relevant elements.\n");
         return 0;
     }
-
+    printf("Sum of positive 2-digit numbers is %d.\n", sum);
     return 1;
 }
 
-int findFirstPairIndex(int* arr, const size_t size, const int threshold)
-{
-    if (size < 2)
-    {
-        return -1;
-    }
-    for (size_t i = 0; i < size - 1; i++)
-    {
-        int current = arr[i];
-        int next = arr[i + 1];
-        if ((current > 0 && next < 0) || (current < 0 && next > 0))
-        {
-            if (current + next < threshold)
-            {
-                return (int)i;
-            }
+int multAllPosEvenWithLastDigit(int* copyArr, const size_t size) {
+    int k = 0;
+    for (size_t i = 0; i < size; i++) {
+        if (copyArr[i] % 2 == 0 && copyArr[i] > 0) {
+            copyArr[i] *= copyArr[size - 1];
+            k++;
         }
     }
+    if (k == 0) {
+        printf("No elements to exchange.\n");
+        return 0;
+    }
+    printArray(copyArr, size);
+    return 1;
+}
 
-    return -1;
+int FindNumberFirstDifPairWhichSumLessDigit(const int* copyArr, const size_t size) {
+    bool k = false; //сделано наподобие счётчиков в предыдущем задании, просто когда надо сделать что-то единоразово, мне удобнее писать через него.
+    printf("Input any number:\n");
+    const int a = Value();
+    for (size_t i = 0; i < size - 1; i++) {
+        if ((copyArr[i] < 0 && copyArr[i + 1] > 0 || copyArr[i] > 0 && copyArr[i + 1] < 0) && copyArr[i] + copyArr[i + 1] < a) {
+            printf("Number of pair is %zu\n", i + 1);
+            k = true;
+            break;
+        }
+    }
+    if (k == false) {
+        printf("No relevant pairs.");
+        return 0;
+    }
+    return 1;
 }
